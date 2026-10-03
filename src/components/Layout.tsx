@@ -1,8 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, MessageSquare, Calendar, User, LogOut, Menu, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -49,9 +48,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
-              {user && (
+              {user ? (
                 <>
                   <Link to="/ask">
                     <Button variant={isActive("/ask") ? "default" : "ghost"} className="gap-2">
@@ -76,16 +74,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     Sign Out
                   </Button>
                 </>
-              )}
-              {!user && (
+              ) : (
                 <Link to="/auth">
                   <Button>Sign In</Button>
                 </Link>
               )}
             </div>
 
-            {/* Mobile menu button */}
             <button
+              type="button"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
@@ -93,10 +91,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <div className="md:hidden pb-4 flex flex-col gap-2">
-              {user && (
+              {user ? (
                 <>
                   <Link to="/ask" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant={isActive("/ask") ? "default" : "ghost"} className="w-full gap-2 justify-start">
@@ -121,8 +118,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     Sign Out
                   </Button>
                 </>
-              )}
-              {!user && (
+              ) : (
                 <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                   <Button className="w-full">Sign In</Button>
                 </Link>
@@ -131,10 +127,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           )}
         </div>
       </nav>
+
       <main className="flex-1">{children}</main>
+
       <footer className="border-t border-border py-6 bg-card">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2025 Ask PV - Prairie View A&M University Assistant
+          © 2025 Ask PV · Student hackathon prototype · Not an official PVAMU service
         </div>
       </footer>
     </div>
