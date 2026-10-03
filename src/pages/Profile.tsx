@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,11 +20,14 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    loadProfile();
+    void loadProfile();
   }, []);
 
   const loadProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) return;
 
     const { data, error } = await (supabase as any)
@@ -33,47 +36,70 @@ const Profile = () => {
       .eq("id", user.id)
       .maybeSingle();
 
+    if (error) {
+      toast({ title: "Unable to load profile", description: error.message, variant: "destructive" });
+      return;
+    }
+
     if (data) {
       setProfile({
-        email: data.email || "",
+        email: data.email || user.email || "",
         major: data.major || "",
         catalog_year: data.catalog_year || "",
         credit_target: data.credit_target || 15,
         preferred_modality: data.preferred_modality || "any",
       });
+    } else {
+      setProfile((current) => ({ ...current, email: user.email || "" }));
     }
   };
 
   const handleSave = async () => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
 
-    const { error } = await (supabase as any)
-      .from("profiles")
-      .update({
-        major: profile.major,
-        catalog_year: profile.catalog_year,
-        credit_target: profile.credit_target,
-        preferred_modality: profile.preferred_modality,
-      })
-      .eq("id", user.id);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
+      if (!user) {
+        toast({ title: "Please sign in again", variant: "destructive" });
+        return;
+      }
+
+      const { error } = await (supabase as any)
+        .from("profiles")
+        .update({
+          major: profile.major,
+          catalog_year: profile.catalog_year,
+          credit_target: profile.credit_target,
+          preferred_modality: profile.preferred_modality,
+        })
+        .eq("id", user.id);
+
+      if (error) throw error;
       toast({ title: "Profile updated successfully" });
+    } catch (error: any) {
+      toast({ title: "Unable to update profile", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDeleteTranscript = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    const confirmed = window.confirm(
+      "Delete your stored transcript data? This action cannot be undone.",
+    );
+    if (!confirmed) return;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast({ title: "Please sign in again", variant: "destructive" });
+      return;
+    }
 
     const { error } = await (supabase as any)
       .from("transcript_rows")
@@ -81,14 +107,11 @@ const Profile = () => {
       .eq("user_id", user.id);
 
     if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({ title: "Transcript data deleted" });
+      toast({ title: "Unable to delete transcript data", description: error.message, variant: "destructive" });
+      return;
     }
+
+    toast({ title: "Transcript data deleted" });
   };
 
   return (
@@ -114,12 +137,7 @@ const Profile = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  value={profile.email}
-                  disabled
-                  className="bg-muted"
-                />
+                <Input id="email" value={profile.email} disabled className="bg-muted" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="major">Major</Label>
@@ -147,7 +165,9 @@ const Profile = () => {
                   min={12}
                   max={18}
                   value={profile.credit_target}
-                  onChange={(e) => setProfile({ ...profile, credit_target: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, credit_target: Number.parseInt(e.target.value, 10) || 15 })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -166,7 +186,7 @@ const Profile = () => {
               </div>
               <Button onClick={handleSave} disabled={loading} className="gap-2">
                 <Save className="w-4 h-4" />
-                Save Changes
+                {loading ? "Saving..." : "Save Changes"}
               </Button>
             </CardContent>
           </Card>
@@ -178,16 +198,14 @@ const Profile = () => {
                 Manage your stored transcript and schedule data
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Delete your uploaded transcript data. This action cannot be undone.
-                </p>
-                <Button variant="destructive" onClick={handleDeleteTranscript} className="gap-2">
-                  <Trash2 className="w-4 h-4" />
-                  Delete Transcript Data
-                </Button>
-              </div>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Delete transcript rows associated with your signed-in account. This action cannot be undone.
+              </p>
+              <Button variant="destructive" onClick={handleDeleteTranscript} className="gap-2">
+                <Trash2 className="w-4 h-4" />
+                Delete Transcript Data
+              </Button>
             </CardContent>
           </Card>
         </div>
