@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, Calendar, GraduationCap, Sparkles, Shield, Zap } from "lucide-react";
+import { MessageSquare, Calendar, GraduationCap, Sparkles, ShieldCheck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -15,23 +15,26 @@ const Index = () => {
                 <GraduationCap className="w-12 h-12 text-secondary-foreground" />
               </div>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Welcome to Ask PV
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Welcome to Ask PV</h1>
             <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90">
-              Your AI-powered assistant for Prairie View A&M University
+              A student-built prototype for campus questions and academic planning
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild className="shadow-gold">
                 <Link to="/ask">
                   <MessageSquare className="w-5 h-5 mr-2" />
-                  Ask Questions
+                  Explore Q&A
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+                className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+              >
                 <Link to="/plan">
                   <Calendar className="w-5 h-5 mr-2" />
-                  Plan Schedule
+                  Explore Planner
                 </Link>
               </Button>
             </div>
@@ -41,11 +44,9 @@ const Index = () => {
 
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything You Need to Succeed
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">One Student Experience</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ask PV combines intelligent Q&A with smart scheduling to help you navigate your academic journey
+            Ask PV explores how campus resources, academic preferences, and semester planning could live in one interface.
           </p>
         </div>
 
@@ -57,7 +58,7 @@ const Index = () => {
               </div>
               <CardTitle>Resource Assistant</CardTitle>
               <CardDescription>
-                Get instant answers from PV's knowledge base with citations and quick actions
+                A Q&A interface designed for sourced campus answers and direct student actions.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -69,7 +70,7 @@ const Index = () => {
               </div>
               <CardTitle>Schedule Planner</CardTitle>
               <CardDescription>
-                Generate conflict-free schedules based on your transcript and preferences
+                A guided planning flow for degree rules, time preferences, modality, and credit targets.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -79,9 +80,9 @@ const Index = () => {
               <div className="w-12 h-12 bg-gradient-gold rounded-lg flex items-center justify-center mb-4 shadow-gold">
                 <Sparkles className="w-6 h-6 text-secondary-foreground" />
               </div>
-              <CardTitle>AI-Powered</CardTitle>
+              <CardTitle>AI-Ready Interface</CardTitle>
               <CardDescription>
-                Intelligent recommendations and natural language understanding
+                The chat experience is structured for a future campus retrieval and AI service with citations.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -89,11 +90,11 @@ const Index = () => {
           <Card className="shadow-card hover:shadow-gold transition-shadow">
             <CardHeader>
               <div className="w-12 h-12 bg-gradient-gold rounded-lg flex items-center justify-center mb-4 shadow-gold">
-                <Shield className="w-6 h-6 text-secondary-foreground" />
+                <ShieldCheck className="w-6 h-6 text-secondary-foreground" />
               </div>
-              <CardTitle>Secure & Private</CardTitle>
+              <CardTitle>Authenticated Profiles</CardTitle>
               <CardDescription>
-                Your data is encrypted and automatically deleted within 60 minutes
+                Supabase authentication supports persisted preferences and user-controlled transcript data deletion.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -105,7 +106,7 @@ const Index = () => {
               </div>
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>
-                One-click access to book advising, view maps, and download forms
+                The experience demonstrates direct paths from an answer to advising, registrar, or campus resources.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -115,9 +116,9 @@ const Index = () => {
               <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mb-4 shadow-purple">
                 <GraduationCap className="w-6 h-6 text-primary-foreground" />
               </div>
-              <CardTitle>Degree Planning</CardTitle>
+              <CardTitle>Degree Planning Concept</CardTitle>
               <CardDescription>
-                Track progress and plan courses according to your catalog requirements
+                The planner models how degree requirements and student preferences could feed a future schedule engine.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -125,9 +126,9 @@ const Index = () => {
 
         <Card className="shadow-purple border-2 border-primary/20">
           <CardContent className="py-12 text-center">
-            <h3 className="text-2xl font-bold mb-4">Ready to get started?</h3>
+            <h3 className="text-2xl font-bold mb-4">Explore the prototype</h3>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Sign in to access all features and start planning your academic success
+              Sign in to view the authenticated profile experience and the hackathon workflows.
             </p>
             <Button size="lg" asChild>
               <Link to="/auth">Get Started</Link>
