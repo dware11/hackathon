@@ -1,73 +1,77 @@
-# Welcome to your Lovable project
+<div align="center">
 
-## Project info
+# Ask PV
 
-**URL**: https://lovable.dev/projects/85710243-dc84-4e85-a18c-8c6748b7d206
+**A student-built campus assistant prototype for Prairie View A&M University: ask campus questions, store academic preferences, and plan a conflict-free semester schedule.**
 
-## How can I edit this code?
+![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-shadcn/ui-06b6d4?logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Auth_+_Postgres-3ecf8e?logo=supabase&logoColor=white)
+![Status](https://img.shields.io/badge/status-hackathon_prototype-yellow)
 
-There are several ways of editing your application.
+</div>
 
-**Use Lovable**
+> **Not an official PVAMU service.** Ask PV is a hackathon prototype. The chat interface currently returns a placeholder response; the AI knowledge-base integration is the next milestone.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/85710243-dc84-4e85-a18c-8c6748b7d206) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## The problem
 
-**Use your preferred IDE**
+PVAMU students often bounce between the catalog, advising pages, the registrar, and degree audits to answer simple questions like *"What do I take next semester?"* Ask PV puts those tasks in one student-facing app.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Page | What it does | Status |
+| --- | --- | --- |
+| **Home** | Landing page introducing the three core tools | ✅ Built |
+| **Auth** | Email sign-up / sign-in with Supabase Auth | ✅ Built |
+| **Profile** | Save major, catalog year, and scheduling preferences; delete stored transcript data on request | ✅ Built (Supabase `profiles`, `transcript_rows`) |
+| **Ask** | Chat UI with source citations and quick actions (book advising, open registrar, campus map) | 🟡 UI built, AI responses stubbed |
+| **Plan** | Four-step schedule planner: upload transcript → degree rules → preferences → results | 🟡 UI flow built, schedule engine planned |
 
-Follow these steps:
+## Tech stack
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Frontend:** React 18, TypeScript, Vite, React Router
+- **UI:** Tailwind CSS, shadcn/ui (Radix primitives), lucide-react icons
+- **Backend:** Supabase (Postgres + Auth), typed client generated from the database schema
+- **Prototyping:** Initial scaffold generated with Lovable, then customized for PVAMU use cases
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Project structure
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```text
+src/
+├── pages/                 # Index, Ask, Plan, Profile, Auth, NotFound
+├── components/
+│   ├── Layout.tsx         # Shared nav + page shell
+│   └── ui/                # shadcn/ui components
+├── hooks/                 # use-toast, use-mobile
+├── integrations/supabase/ # Supabase client + generated DB types
+└── lib/utils.ts
 ```
 
-**Edit a file directly in GitHub**
+## Run locally
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+git clone https://github.com/dware11/hackathon.git
+cd hackathon
+npm install
+cp .env.example .env      # add your Supabase project URL and publishable key
+npm run dev               # http://localhost:8080
+```
 
-**Use GitHub Codespaces**
+## Privacy by design
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Students can delete stored transcript data at any time from the Profile page. The app is meant to keep only what scheduling needs.
 
-## What technologies are used for this project?
+## Roadmap
 
-This project is built with:
+- [ ] Connect **Ask** to a retrieval-augmented model over PVAMU catalog and advising pages, with real citations
+- [ ] Parse uploaded transcripts into `transcript_rows`
+- [ ] Generate conflict-free schedules from degree rules and time preferences
+- [ ] Export schedules to calendar (.ics)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Team
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/85710243-dc84-4e85-a18c-8c6748b7d206) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built during a hackathon at Prairie View A&M University. Maintained by [Deja Ware](https://github.com/dware11).
